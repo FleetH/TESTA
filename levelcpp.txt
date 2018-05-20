@@ -20,12 +20,12 @@ Levels::~Levels()
 }
 bool Levels::init(XMLElement * pElement)
 {
-	level_id = atoi(pElement->Attribute("id"));//¹Ø¿¨id
-	level_n = atoi(pElement->Attribute("n"));//µãÊý
-	level_m = atoi(pElement->Attribute("m"));//±ßÊý
-	level_best = atoi(pElement->Attribute("best"));//×î´ó´æ»îÊý
-	level_road = split_int(pElement->Attribute("road"));//±ßÆðÊ¼µã
-	level_pos = split_int(pElement->Attribute("pos"));//Î»ÖÃ×ø±ê
+	level_id = atoi(pElement->Attribute("id"));//å…³å¡id
+	level_n = atoi(pElement->Attribute("n"));//ç‚¹æ•°
+	level_m = atoi(pElement->Attribute("m"));//è¾¹æ•°
+	level_best = atoi(pElement->Attribute("best"));//æœ€å¤§å­˜æ´»æ•°
+	level_road = split_int(pElement->Attribute("road"));//è¾¹èµ·å§‹ç‚¹
+	level_pos = split_int(pElement->Attribute("pos"));//ä½ç½®åæ ‡
 	return true;
 }
 bool Levels::init_xml()
@@ -38,27 +38,27 @@ bool Levels::init_xml()
 	pBuffer[(int)bufferSize] = '\0';
 	XMLElement* root = doc->RootElement();*/
 
-	/*tinyxml2::XMLDocument pDoc;//´´½¨Ò»¸ö¿ÕµÄXMLDocument¡£
-	string content = FileUtils::getInstance()->getStringFromFile("config/levels.xml");//ÏÈÓÃFileUtilsÀïµÄ¹¤¾ß½«ÎÄ¼þÄÚµÄÄÚÈÝ¶Á½øÄÚ´æ¡£
+	/*tinyxml2::XMLDocument pDoc;//åˆ›å»ºä¸€ä¸ªç©ºçš„XMLDocumentã€‚
+	string content = FileUtils::getInstance()->getStringFromFile("config/levels.xml");//å…ˆç”¨FileUtilsé‡Œçš„å·¥å…·å°†æ–‡ä»¶å†…çš„å†…å®¹è¯»è¿›å†…å­˜ã€‚
 	
-	pDoc.Parse(content.c_str());//ÔÙÖ±½Ó½âÎöÄÚ´æÀïµÄÄÚÈÝ£¬´Ó¶øÈÆ¿ªÁËÓÃtinyxml¶ÁÈ¡ÎÄ¼þÕâÒ»²½
-	XMLElement* root = pDoc.RootElement();//»ñÈ¡¸ùÔªËØ*/
+	pDoc.Parse(content.c_str());//å†ç›´æŽ¥è§£æžå†…å­˜é‡Œçš„å†…å®¹ï¼Œä»Žè€Œç»•å¼€äº†ç”¨tinyxmlè¯»å–æ–‡ä»¶è¿™ä¸€æ­¥
+	XMLElement* root = pDoc.RootElement();//èŽ·å–æ ¹å…ƒç´ */
 	
-	// ¼ì²éÄ¿Â¼£¨Èç¹û²»´æÔÚ½«´´½¨Ä¿Â¼£©  
+	// æ£€æŸ¥ç›®å½•ï¼ˆå¦‚æžœä¸å­˜åœ¨å°†åˆ›å»ºç›®å½•ï¼‰  
 	std::string writablePath = FileUtils::getInstance()->getWritablePath();
 	createDirectory(writablePath + "config/");
 
-	// ¿½±´ÎÄ¼þ£¨´Ó×ÊÔ´Ä¿Â¼¿½±´µ½¿ÉÐ´Ä¿Â¼£©  
+	// æ‹·è´æ–‡ä»¶ï¼ˆä»Žèµ„æºç›®å½•æ‹·è´åˆ°å¯å†™ç›®å½•ï¼‰  
 	copyFile("config/levels.xml");
-	std::string filePath = FileUtils::getInstance()->getWritablePath() + "config/levels.xml";//»ñÈ¡ÎÄ¼þÂ·¾¶¡£
-	tinyxml2::XMLDocument *pDoc = new tinyxml2::XMLDocument();//´´½¨Ò»¸ö¿ÕµÄXMLDocument
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "config/levels.xml";//èŽ·å–æ–‡ä»¶è·¯å¾„ã€‚
+	tinyxml2::XMLDocument *pDoc = new tinyxml2::XMLDocument();//åˆ›å»ºä¸€ä¸ªç©ºçš„XMLDocument
 
-	XMLError errorId = pDoc->LoadFile(filePath.c_str());//ÓÃXMLDocumentÀ´¶ÁÈ¡ÎÄ¼þ²¢½øÐÐ½âÎö£¬²¢½ÓÊÜ·µ»ØÖµ¡£
+	XMLError errorId = pDoc->LoadFile(filePath.c_str());//ç”¨XMLDocumentæ¥è¯»å–æ–‡ä»¶å¹¶è¿›è¡Œè§£æžï¼Œå¹¶æŽ¥å—è¿”å›žå€¼ã€‚
 	/*if (errorId != 0) {
-		    //Õâ¸ö·µ»ØÖµÎª0Ê±±íÊ¾½âÎö³É¹¦£¬ÆäËûÖµÔò±íÊ¾³ö´í¡£
+		    //è¿™ä¸ªè¿”å›žå€¼ä¸º0æ—¶è¡¨ç¤ºè§£æžæˆåŠŸï¼Œå…¶ä»–å€¼åˆ™è¡¨ç¤ºå‡ºé”™ã€‚
 			     return;
 	}*/
-	XMLElement *root = pDoc->RootElement();//»ñÈ¡¸ùÔªËØ
+	XMLElement *root = pDoc->RootElement();//èŽ·å–æ ¹å…ƒç´ 
 	
 	if (root == NULL) return true;
 	return guanqia_data(root);
@@ -94,10 +94,10 @@ void Levels::clear_data()
 bool Levels::createDirectory(const std::string& dirpath)
 {
 #if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)  
-	DIR *pDir = opendir(dirpath.c_str()); // ´ò¿ªÄ¿Â¼  
+	DIR *pDir = opendir(dirpath.c_str()); // æ‰“å¼€ç›®å½•  
 	if (!pDir)
 	{
-		// ´´½¨Ä¿Â¼  
+		// åˆ›å»ºç›®å½•  
 		int ret = mkdir(dirpath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
 		if (ret != 0 && errno != EEXIST)
 		{
@@ -119,11 +119,11 @@ bool Levels::createDirectory(const std::string& dirpath)
 }
 bool Levels::copyFile(const std::string& filename)
 {
-	// ×ÊÔ´Â·¾¶  
+	// èµ„æºè·¯å¾„  
 	std::string sourcePath = FileUtils::getInstance()->fullPathForFilename("levels.xml");
 	Data data = FileUtils::getInstance()->getDataFromFile(sourcePath);
 
-	// ¿ÉÐ´Â·¾¶  
+	// å¯å†™è·¯å¾„  
 	std::string destPath = FileUtils::getInstance()->getWritablePath() + filename;
 	FILE *fp = fopen(destPath.c_str(), "w+");
 	if (fp)

@@ -15,21 +15,21 @@ class Levels : public cocos2d::Ref
 public:
 	Levels();
 	~Levels();
-	static Vector <Levels*> level_list;//´¢´æ¹Ø¿¨Êı¾İ
-	bool init(XMLElement * pElement);//´«Èë×Ó½ÚµãÊı¾İ
+	static Vector <Levels*> level_list;//å‚¨å­˜å…³å¡æ•°æ®
+	bool init(XMLElement * pElement);//ä¼ å…¥å­èŠ‚ç‚¹æ•°æ®
 	static bool createDirectory(const std::string& dirpath);
 	static bool copyFile(const std::string& filename);
-	static bool init_xml();//¶ÁÈ¡xmlÎÄ¼ş
-	static bool guanqia_data(XMLElement * pElement);//´æ´¢¹Ø¿¨Êı¾İ
-	static void clear_data();//ÇåÀíÊı¾İ
-	static std::vector<int> split_int(std::string str);//·Ö½â×Ö·û´®
+	static bool init_xml();//è¯»å–xmlæ–‡ä»¶
+	static bool guanqia_data(XMLElement * pElement);//å­˜å‚¨å…³å¡æ•°æ®
+	static void clear_data();//æ¸…ç†æ•°æ®
+	static std::vector<int> split_int(std::string str);//åˆ†è§£å­—ç¬¦ä¸²
 private:
-	CC_SYNTHESIZE(int, level_id, level_id);//¹Ø¿¨id
-	CC_SYNTHESIZE(int, level_n, level_n);//µãÊı
-	CC_SYNTHESIZE(int, level_m, level_m);//±ßÊı
-	CC_SYNTHESIZE(int, level_best, level_best);//×î´ó´æ»îÊı
-	CC_SYNTHESIZE(std::vector<int>, level_road, level_road);//±ßÊÕ·¢µã
-	CC_SYNTHESIZE(std::vector<int>, level_pos, level_pos);//µã×ø±ê
+	CC_SYNTHESIZE(int, level_id, level_id);//å…³å¡id
+	CC_SYNTHESIZE(int, level_n, level_n);//ç‚¹æ•°
+	CC_SYNTHESIZE(int, level_m, level_m);//è¾¹æ•°
+	CC_SYNTHESIZE(int, level_best, level_best);//æœ€å¤§å­˜æ´»æ•°
+	CC_SYNTHESIZE(std::vector<int>, level_road, level_road);//è¾¹æ”¶å‘ç‚¹
+	CC_SYNTHESIZE(std::vector<int>, level_pos, level_pos);//ç‚¹åæ ‡
 
 };
 #endif 
