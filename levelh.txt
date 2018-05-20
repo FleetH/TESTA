@@ -1,0 +1,35 @@
+#ifndef __LEVELS_H__
+#define __LEVELS_H__
+
+#include "cocos2d.h"
+#include "../external/tinyxml2/tinyxml2.h"
+#include <sys/stat.h>  
+#include <dirent.h>  
+
+using namespace tinyxml2;
+USING_NS_CC;
+using namespace std;
+
+class Levels : public cocos2d::Ref
+{
+public:
+	Levels();
+	~Levels();
+	static Vector <Levels*> level_list;//储存关卡数据
+	bool init(XMLElement * pElement);//传入子节点数据
+	static bool createDirectory(const std::string& dirpath);
+	static bool copyFile(const std::string& filename);
+	static bool init_xml();//读取xml文件
+	static bool guanqia_data(XMLElement * pElement);//存储关卡数据
+	static void clear_data();//清理数据
+	static std::vector<int> split_int(std::string str);//分解字符串
+private:
+	CC_SYNTHESIZE(int, level_id, level_id);//关卡id
+	CC_SYNTHESIZE(int, level_n, level_n);//点数
+	CC_SYNTHESIZE(int, level_m, level_m);//边数
+	CC_SYNTHESIZE(int, level_best, level_best);//最大存活数
+	CC_SYNTHESIZE(std::vector<int>, level_road, level_road);//边收发点
+	CC_SYNTHESIZE(std::vector<int>, level_pos, level_pos);//点坐标
+
+};
+#endif 
