@@ -1,0 +1,140 @@
+#include "Levels.h"
+
+Vector <Levels*> Levels::level_list;
+std::vector<int> Levels::split_int(std::string str)
+{
+	vector<int> res;
+	stringstream ss(str);
+	int x;
+	while (ss >> x)
+	{
+		res.push_back(x);
+	}
+	return res;
+}
+Levels::Levels()
+{
+}
+Levels::~Levels()
+{
+}
+bool Levels::init(XMLElement * pElement)
+{
+	level_id = atoi(pElement->Attribute("id"));//关卡id
+	level_n = atoi(pElement->Attribute("n"));//点数
+	level_m = atoi(pElement->Attribute("m"));//边数
+	level_best = atoi(pElement->Attribute("best"));//最大存活数
+	level_road = split_int(pElement->Attribute("road"));//边起始点
+	level_pos = split_int(pElement->Attribute("pos"));//位置坐标
+	return true;
+}
+bool Levels::init_xml()
+{
+
+	/*tinyxml2::XMLDocument* doc = new tinyxml2::XMLDocument();
+	ssize_t bufferSize;
+	auto pBuffer = CCFileUtils::sharedFileUtils()->getFileData("levels.xml", "rb", &bufferSize);
+	int error = doc->Parse((const char*)pBuffer);
+	pBuffer[(int)bufferSize] = '\0';
+	XMLElement* root = doc->RootElement();*/
+
+	/*tinyxml2::XMLDocument pDoc;//创建一个空的XMLDocument。
+	string content = FileUtils::getInstance()->getStringFromFile("config/levels.xml");//先用FileUtils里的工具将文件内的内容读进内存。
+	
+	pDoc.Parse(content.c_str());//再直接解析内存里的内容，从而绕开了用tinyxml读取文件这一步
+	XMLElement* root = pDoc.RootElement();//获取根元素*/
+	
+	// 检查目录（如果不存在将创建目录）  
+	std::string writablePath = FileUtils::getInstance()->getWritablePath();
+	createDirectory(writablePath + "config/");
+
+	// 拷贝文件（从资源目录拷贝到可写目录）  
+	copyFile("config/levels.xml");
+	std::string filePath = FileUtils::getInstance()->getWritablePath() + "config/levels.xml";//获取文件路径。
+	tinyxml2::XMLDocument *pDoc = new tinyxml2::XMLDocument();//创建一个空的XMLDocument
+
+	XMLError errorId = pDoc->LoadFile(filePath.c_str());//用XMLDocument来读取文件并进行解析，并接受返回值。
+	/*if (errorId != 0) {
+		    //这个返回值为0时表示解析成功，其他值则表示出错。
+			     return;
+	}*/
+	XMLElement *root = pDoc->RootElement();//获取根元素
+	
+	if (root == NULL) return true;
+	return guanqia_data(root);
+}
+bool Levels::guanqia_data(XMLElement * pElememt)
+{
+	Levels::level_list.clear();
+	auto curchild = pElememt->FirstChildElement();
+	
+	while (NULL != curchild)
+	{
+		const char* nodeName = curchild->Value();
+		if (strcmp(nodeName, "level") == 0)
+		{
+			auto lev = new Levels();
+			if (!lev->init(curchild))
+			{
+				CC_SAFE_RELEASE_NULL(lev);
+				return false;
+			}
+			Levels::level_list.pushBack(lev);
+			lev->release();
+		}
+		curchild = curchild->NextSiblingElement();
+	}
+	
+	return true;
+}
+void Levels::clear_data()
+{
+	Levels::level_list.clear();
+}
+bool Levels::createDirectory(const std::string& dirpath)
+{
+#if (CC_TARGET_PLATFORM != CC_PLATFORM_WIN32)  
+	DIR *pDir = opendir(dirpath.c_str()); // 打开目录  
+	if (!pDir)
+	{
+		// 创建目录  
+		int ret = mkdir(dirpath.c_str(), S_IRWXU | S_IRWXG | S_IRWXO);
+		if (ret != 0 && errno != EEXIST)
+		{
+			return false;
+		}
+	}
+	return true;
+#else  
+	if ((GetFileAttributesA(dirpath.c_str())) == INVALID_FILE_ATTRIBUTES)
+	{
+		BOOL ret = CreateDirectoryA(dirpath.c_str(), NULL);
+		if (!ret && ERROR_ALREADY_EXISTS != GetLastError())
+		{
+			return false;
+		}
+	}
+	return true;
+#endif  
+}
+bool Levels::copyFile(const std::string& filename)
+{
+	// 资源路径  
+	std::string sourcePath = FileUtils::getInstance()->fullPathForFilename("levels.xml");
+	Data data = FileUtils::getInstance()->getDataFromFile(sourcePath);
+
+	// 可写路径  
+	std::string destPath = FileUtils::getInstance()->getWritablePath() + filename;
+	FILE *fp = fopen(destPath.c_str(), "w+");
+	if (fp)
+	{
+		size_t size = fwrite(data.getBytes(), sizeof(unsigned char), data.getSize(), fp);
+		fclose(fp);
+
+		if (size > 0)
+		{
+			return true;
+		}
+	}
+	return false;
+}
