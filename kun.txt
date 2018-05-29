@@ -1,0 +1,35 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+public class Kun
+{
+    public string Name{get;set;}
+    public string Sprite{get;set;}
+    public string Image{get;set;}
+    public string Description{get;set;}
+    public int Time{get;set;}
+    public int Life{get;set;}
+    public int Priceid{get;set;}
+    public int Pricenum{get;set;}
+    public int Materialid{get;set;}
+    public int Speed{get;set;}
+    public static List<Kun> kun_list
+    {
+        get;
+    }
+    public Kun(string name, string sprite,string image, string description,
+        int time, int life, int priceid, int pricenum, int materialid, int speed)
+    {
+		this.Name = name;
+        this.Sprite = sprite;
+        this.Image = image;
+        this.Description = description;
+        this.Time = time;
+        this.Life = life;
+        this.Priceid = priceid;
+        this.Pricenum = pricenum;
+        this.Materialid = materialid;
+        this.Speed = speed;
+	}
+
+}

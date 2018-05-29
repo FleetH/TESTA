@@ -1,0 +1,56 @@
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+
+public class KunsManager : MonoBehaviour {
+
+	// Use this for initialization
+ 
+    private  List<Kun> kunList;
+    private void Awake()
+    {
+        ParseKunJson();
+    }
+	void Start () {
+		
+	}
+	
+	// Update is called once per frame
+	void Update () {
+		
+	}
+    void ParseKunJson()
+    {
+        kunList = new List<Kun>();
+        //文本在Unity里面是TextAsset类型
+        TextAsset kunText = Resources.Load<TextAsset>("Kun");
+        string kunsJson = kunText.text;
+        JSONObject j = new JSONObject(kunsJson);
+
+        foreach (JSONObject temp in j.list)
+        {
+
+            //下面是解析这个对象里面的公有属性
+            string name = temp["name"].str;
+            string sprite = temp["sprite"].str;
+            string image = temp["image"].str;
+            string description = temp["description"].str;
+            int time = (int)temp["time"].n;
+            int life = (int)temp["life"].n;
+            int priceid = (int)temp["priceid"].n;
+            int pricenum = (int)temp["pricenum"].n;
+            int materialid = (int)temp["materialid"].n;
+            int speed = (int)temp["speed"].n;
+
+            Kun kun = new Kun(name, sprite, image, description, time, life, priceid, pricenum, materialid, speed);
+            kunList.Add(kun);
+            Debug.Log("ok!");
+        }
+
+    }
+    public Kun GetItemById(int id)
+    {
+        if(id>=kunList.Count||id<0) return null;
+        return kunList[id - 1];
+    }
+}
